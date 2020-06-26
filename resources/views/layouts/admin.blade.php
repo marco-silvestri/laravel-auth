@@ -15,7 +15,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <a class="nav-link" href="{{ route('admin.posts.index') }}">Archive</a>
+                        <a class="nav-link" href="{{ route('admin.posts.index') }}">Manage</a>
+                        <a class="nav-link" href="{{ route('admin.posts.create') }}">Create</a>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->

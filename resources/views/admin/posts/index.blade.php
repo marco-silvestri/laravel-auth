@@ -31,13 +31,18 @@
                         <a href="{{ route('admin.posts.edit', $post->id) }}">Edit</a>
                     </td>
                     <td>
-                        <a href="{{ route('admin.posts.edit', $post->id) }}">Delete</a>{{-- IS A PLACEHOLDER --}}
+                        <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Delete">
+                        </form>
                     </td>
                 </tr>
     @endforeach
             </tbody>
             </table>
     </div>
+    {{ $posts->links() }}
 @endsection
 
 

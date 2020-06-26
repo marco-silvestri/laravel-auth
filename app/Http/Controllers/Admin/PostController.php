@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Post;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(5);
@@ -20,69 +16,87 @@ class PostController extends Controller
         return view('admin.posts.index', compact('posts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        //$tags = Tag::all();
+    return view('admin.posts.create'/*, compact('tags')*/);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+        $request->validate($this->validationRules());
+
+        $data = $request->all();
+        $data['user_id'] = 1;
+        $data['slug']= Str::slug($data['title'], '-');
+
+        $newPost = new Post();
+        $newPost->fill($data);
+        $saved = $newPost->save();
+        /*
+        if ($saved) {
+            if ( !empty($data['tags'])){
+                $newPost->tags()->attach($data['tags']);
+            }
+        }
+        */
+        return redirect()->route('admin.posts.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function show($id){
+        $post = Post::where('id', $id)->get();
+        
+        if (empty($post)) {
+            abort('404');
+        }
+
+        return view('admin.posts.show', compact('post'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        //$tags = Tag::all();
+
+    return view('admin.posts.edit', compact('post'/*,'tags'*/));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, Post $post){
+        $request->validate($this->validationRules());
+
+        $data = $request->all();
+        $updated = $post->update($data);
+/*
+        if ($updated){
+            if (!empty($data['tags'])){
+                $post->tags()->sync($data['tags']);
+            } else {
+                $post->tags()->detach();
+            }
+        }
+*/
+    return redirect()->route('admin.posts.show', $post->id/*slug*/);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    
+    public function destroy(Post $post){
+        if (empty($post)){
+            abort('404');
+        }
+
+        $oldPost = $post->title;
+        //$post->tags()->detach();
+        //$post->comments()->delete();
+        $deleted = $post->delete();
+
+        if ($deleted){
+            return redirect()->route('admin.posts.index')->with('hasDeleted', $oldPost);
+        }
+    }
+
+    private function validationRules(){
+        return [
+            'title' => 'required|max:255',
+            'body' => 'required',
+            //'tags.*' => 'exists:tags,id' //.* all the values of the collection
+        ];
     }
 }
