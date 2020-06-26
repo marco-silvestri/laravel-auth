@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use App\Post;
 
 class PostController extends Controller
@@ -26,7 +27,7 @@ class PostController extends Controller
         $request->validate($this->validationRules());
 
         $data = $request->all();
-        $data['user_id'] = 1;
+        $data['user_id'] = Auth::id();
         $data['slug']= Str::slug($data['title'], '-');
 
         $newPost = new Post();
@@ -60,8 +61,8 @@ class PostController extends Controller
     }
 
     public function update(Request $request, Post $post){
+        
         $request->validate($this->validationRules());
-
         $data = $request->all();
         $updated = $post->update($data);
 /*

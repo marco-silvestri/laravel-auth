@@ -15,8 +15,8 @@
                 <label for="body">Post</label>
                 <textarea class="form-control" id="body" rows="20" name="body" placeholder="Write your post" value="{{ old('body') }}"></textarea>
             </div>
+            <input type="submit" value="Update">
         </form>
-        <input type="submit" value="Update">
     </div>
 </section>
 @endsection

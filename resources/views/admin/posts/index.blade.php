@@ -21,9 +21,23 @@
                     <td>{{ $post->id }}</td>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->body }}</td>
-                    <td>{{ $post->user_id }}</td>
-                    <td>{{ $post->created_at }}</td>
-                    <td>{{ $post->updated_at }}</td>
+                    <td>{{ $post->user->name}}</td>
+                    <td>
+                        <table>
+                        <tbody>
+                            <tr>
+                                <td>{{ $post->created_at->format('d-m-Y') }}</td>
+                                <td>{{ $post->created_at->format('h:m:s') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </td>
+                    <td>@if ($post->created_at->eq($post->updated_at))
+                        Same as creation
+                    @else
+                        {{ $post->updated_at->diffForHumans() }}
+                    @endif
+                    </td>
                     <td>
                         <a href="{{ route('admin.posts.show', $post->id) }}">Read more</a>
                     </td>
