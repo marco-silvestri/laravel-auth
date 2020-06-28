@@ -22,4 +22,17 @@ class PostController extends Controller
 
         return view('guest.posts.show', compact('post'));
     }
+
+    public function searchByKeys(Request $request){
+        $keys = $request['keys'];
+        $collection = Post::all();
+        $posts = [];
+        foreach ($collection as $item){
+            if ( strpos($item->title, $keys) || strpos($item->body, $keys)){
+                $posts[] = $item;
+            }
+        }
+
+        return view('guest.posts.search', compact('posts'));
+    }
 }

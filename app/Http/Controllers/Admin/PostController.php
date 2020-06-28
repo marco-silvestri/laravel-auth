@@ -100,4 +100,17 @@ class PostController extends Controller
             //'tags.*' => 'exists:tags,id' //.* all the values of the collection
         ];
     }
+
+    public function searchByKeys(Request $request){
+        $keys = $request['keys'];
+        $collection = Post::all();
+        $posts = [];
+        foreach ($collection as $item){
+            if ( strpos($item->title, $keys) || strpos($item->body, $keys)){
+                $posts[] = $item;
+            }
+        }
+
+        return view('admin.posts.search', compact('posts'));
+    }
 }

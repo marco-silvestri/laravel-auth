@@ -16,6 +16,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <a class="nav-link" href="{{ route('posts') }}">Archive</a>
+                        @include('layouts.partials.searchbar')
                     </ul>
 
                     <!-- Right Side Of Navbar -->
