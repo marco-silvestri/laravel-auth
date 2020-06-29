@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 #Guest
-Route::get('/', 'HomeController@index')->name('guest.welcome');
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('posts', 'PostController@index')->name('posts');
 Route::get('posts/{id}', 'PostController@show')->name('guest.posts.show');
 Route::post('search', 'PostController@searchByKeys')->name('search');

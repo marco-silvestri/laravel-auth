@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
     <div class="container">
@@ -9,9 +9,9 @@
                 <h6 class="card-subtitle mb-2 text-muted">Original author: {{ $post->user_id }}</h6>
                 <p class="card-text">{{ $post->body }}</p>
                 @forelse ($post->tags as $tag)
-                <div class="content has-text-left">{{ $tag->name }}</div>
+                <div>{{ $tag->name }}</div>
                 @empty
-                <div class="content has-text-left">No related tags</div>
+                <div>No related tags</div>
                 @endforelse
                 <a href="{{ route('admin.posts.edit', $post->id) }}" class="card-link">Edit</a>
                 <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST">

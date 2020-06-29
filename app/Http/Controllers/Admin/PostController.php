@@ -49,7 +49,7 @@ class PostController extends Controller
         if (empty($post)) {
             abort('404');
         }
-
+        
         return view('admin.posts.show', compact('post'));
     }
 

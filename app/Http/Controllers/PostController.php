@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -13,12 +14,14 @@ class PostController extends Controller
         return view('guest.posts.index', compact('posts'));
     }
 
-    public function show(Post $post){
+    public function show($id){
         
+        $post = Post::find($id);
+
         if (empty($post)) {
             abort('404');
         }
-
+        
         return view('guest.posts.show', compact('post'));
     }
 
