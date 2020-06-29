@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -19,8 +20,8 @@ class PostController extends Controller
 
     public function create()
     {
-        //$tags = Tag::all();
-    return view('admin.posts.create'/*, compact('tags')*/);
+        $tags = Tag::all();
+    return view('admin.posts.create', compact('tags'));
     }
 
     public function store(Request $request){
@@ -33,18 +34,17 @@ class PostController extends Controller
         $newPost = new Post();
         $newPost->fill($data);
         $saved = $newPost->save();
-        /*
+        
         if ($saved) {
             if ( !empty($data['tags'])){
                 $newPost->tags()->attach($data['tags']);
             }
         }
-        */
+        
         return redirect()->route('admin.posts.index');
     }
 
-    public function show($id){
-        $post = Post::where('id', $id)->get();
+    public function show(Post $post){
         
         if (empty($post)) {
             abort('404');
@@ -55,9 +55,9 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        //$tags = Tag::all();
+        $tags = Tag::all();
 
-    return view('admin.posts.edit', compact('post'/*,'tags'*/));
+    return view('admin.posts.edit', compact('post','tags'));
     }
 
     public function update(Request $request, Post $post){
@@ -65,7 +65,7 @@ class PostController extends Controller
         $request->validate($this->validationRules());
         $data = $request->all();
         $updated = $post->update($data);
-/*
+
         if ($updated){
             if (!empty($data['tags'])){
                 $post->tags()->sync($data['tags']);
@@ -73,8 +73,8 @@ class PostController extends Controller
                 $post->tags()->detach();
             }
         }
-*/
-    return redirect()->route('admin.posts.show', $post->id/*slug*/);
+
+        return redirect()->route('admin.posts.show', $post->id/*slug*/);
     }
 
     
@@ -84,8 +84,8 @@ class PostController extends Controller
         }
 
         $oldPost = $post->title;
-        //$post->tags()->detach();
-        //$post->comments()->delete();
+        $post->tags()->detach();
+        $post->comments()->delete();
         $deleted = $post->delete();
 
         if ($deleted){
@@ -97,7 +97,7 @@ class PostController extends Controller
         return [
             'title' => 'required|max:255',
             'body' => 'required',
-            //'tags.*' => 'exists:tags,id' //.* all the values of the collection
+            'tags.*' => 'exists:tags,id' //.* all the values of the collection
         ];
     }
 
@@ -110,7 +110,7 @@ class PostController extends Controller
                 $posts[] = $item;
             }
         }
-
+        
         return view('admin.posts.search', compact('posts'));
     }
 }

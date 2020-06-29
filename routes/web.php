@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'HomeController@index')->name('guest.welcome');
 Route::get('posts', 'PostController@index')->name('posts');
 Route::get('posts/{id}', 'PostController@show')->name('guest.posts.show');
-Route::get('search', 'PostController@searchByKeys')->name('search');
+Route::post('search', 'PostController@searchByKeys')->name('search');
 
 Auth::routes();
 
@@ -18,5 +18,5 @@ Route::prefix('admin')
     ->group(function(){
         Route::get('home', 'HomeController@index')->name('home');
         Route::resource('posts', 'PostController');
-        Route::get('search', 'PostController@searchByKeys')->name('search');
+        Route::post('search', 'PostController@searchByKeys')->name('search');
     });

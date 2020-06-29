@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="mb-4">Post Manager</h1>
+        <h1 class="mb-4">Search results</h1>
         <table class="table table-borderless">
             <thead>
                 <tr>

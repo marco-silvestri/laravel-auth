@@ -17,7 +17,7 @@
                     <ul class="navbar-nav mr-auto">
                         <a class="nav-link" href="{{ route('admin.posts.index') }}">Manage</a>
                         <a class="nav-link" href="{{ route('admin.posts.create') }}">Create</a>
-                        @include('layouts.partials.searchbaradmin')
+                        @include('layouts.partials.searchbar')
                     </ul>
 
                     <!-- Right Side Of Navbar -->

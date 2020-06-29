@@ -15,6 +15,16 @@
                 <label for="body">Post</label>
                 <textarea class="form-control" id="body" rows="20" name="body">{{ $post->body , old('body')  }}</textarea>
             </div>
+            <div class="container">
+                @foreach ($tags as $tag)
+                    <div class="checkbox">
+                        <input type="checkbox" name="tags[]" id="tag-{{ $loop->iteration }}" value="{{ $tag->id }}"
+                        @if ($post->tags->contains($tag->id))
+                            checked
+                        @endif>
+                        <label for="tag-{{ $loop->iteration }}">{{ $tag->name }}</label>
+                    </div>
+                @endforeach
             <input type="submit" value="Update">
         </form>
     </div>

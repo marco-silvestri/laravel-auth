@@ -13,8 +13,7 @@ class PostController extends Controller
         return view('guest.posts.index', compact('posts'));
     }
 
-    public function show($id){
-        $post = Post::where('id', $id)->get();
+    public function show(Post $post){
         
         if (empty($post)) {
             abort('404');
