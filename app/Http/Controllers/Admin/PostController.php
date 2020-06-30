@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\Tag;
+use App\Mail\SendNewMail;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -47,6 +49,8 @@ class PostController extends Controller
             }
         }
         
+        Mail::to('test@test.it')    
+            ->send(new SendNewMail());
         return redirect()->route('admin.posts.index');
     }
 
@@ -55,7 +59,7 @@ class PostController extends Controller
         if (empty($post)) {
             abort('404');
         }
-        
+        #dd($post);
         return view('admin.posts.show', compact('post'));
     }
 
