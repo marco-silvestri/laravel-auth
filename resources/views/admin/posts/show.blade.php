@@ -21,5 +21,13 @@
                 </form>
             </div>
         </div>
+
+        <h3 class="mb-4">Image</h3>
+        @if (!empty($post->path_img))
+            <img src="{{ asset('storage' . $post->path_img) }}" alt="{{ $post->title }}">
+        @else
+            <p>No image found</p>
+        @endif
+
     </div>
 @endsection

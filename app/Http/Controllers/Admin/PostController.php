@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage; #class storage
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,11 @@ class PostController extends Controller
         $data = $request->all();
         $data['user_id'] = Auth::id();
         $data['slug']= Str::slug($data['title'], '-');
+
+        #prep the file object
+        if(!empty($data['path_img'])){
+            $data['path_img'] = Storage::disk('public')->put('images', $data['path_img']);
+        };
 
         $newPost = new Post();
         $newPost->fill($data);
@@ -64,6 +70,18 @@ class PostController extends Controller
         
         $request->validate($this->validationRules());
         $data = $request->all();
+
+        if(!empty($data['path_img'])){
+            #delete existing
+            if(!empty($post->path_img)){
+                Storage::disk('public')->delete($post->path_img);
+            }
+
+
+            #set new
+            Storage::disk('public')->put('images', $data['path_img']);
+        }
+
         $updated = $post->update($data);
 
         if ($updated){
@@ -89,6 +107,9 @@ class PostController extends Controller
         $deleted = $post->delete();
 
         if ($deleted){
+            if(!empty($post->path_img)){
+                Storage::disk('public' )->delete($post->path_img);
+            }
             return redirect()->route('admin.posts.index')->with('hasDeleted', $oldPost);
         }
     }
@@ -97,7 +118,8 @@ class PostController extends Controller
         return [
             'title' => 'required|max:255',
             'body' => 'required',
-            'tags.*' => 'exists:tags,id' //.* all the values of the collection
+            'tags.*' => 'exists:tags,id', //.* all the values of the collection
+            'path_img' => 'image'
         ];
     }
 

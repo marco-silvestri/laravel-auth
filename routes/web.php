@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 #Guest
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('posts', 'PostController@index')->name('posts');
-Route::get('posts/{id}', 'PostController@show')->name('guest.posts.show');
+Route::get('posts/{post}', 'PostController@show')->name('guest.posts.show'); #I had to pass the whole Eloquent instance
 Route::post('search', 'PostController@searchByKeys')->name('search');
 
 Auth::routes();
